@@ -5,13 +5,17 @@ rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
 yum install jenkins -y --nogpgcheck -q
 yum -y install epel-release
 yum install nginx y --nogpgcheck -q
+yum -y install docker
 cp /tmp/jenkins_nginx.conf /etc/nginx/conf.d/jenkins.conf
 usermod -s /bin/bash jenkins
 setsebool -P httpd_can_network_connect 1
 systemctl enable jenkins
 systemctl enable nginx
+systemctl enable docker
 systemctl start jenkins
 systemctl start nginx
+systemctl start docker
+chmod 666 /var/run/docker.sock
 echo "##### Waiting for secret"
 while [ ! -f /var/lib/jenkins/secrets/initialAdminPassword ]
 do
